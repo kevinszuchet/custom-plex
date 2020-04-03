@@ -1,4 +1,4 @@
-version: "2.1"
+version: "2"
 
 services:
 
@@ -41,14 +41,11 @@ services:
       - ${STORAGE}/torrents:/downloads
     ports:
       - 9091:9091
-      - 51413:51413
+      - 51413:51413/tcp
       - 51413:51413/udp
     expose:
       - 9091
     restart: unless-stopped
-    sysctls:
-      - net.core.rmem_max=4194304
-      - net.core.wmem_max=1048576
 
   flexget:
     image : pablokbs/docker-flexget:amd64
