@@ -9,3 +9,8 @@ downloads/*
 *.log
 .DS_Store
 *.sqlite
+transmission/*/
+transmission/*.dat
+transmission/*.json
+flexget/.*
+flexget/cached_resources
