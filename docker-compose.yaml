@@ -19,7 +19,7 @@ services:
       - ${STORAGE}/torrents:/downloads
 
   plex:
-    image: jaymoulin/plex:1.16.5
+    image: jaymoulin/plex
     expose:
       - 32400
       - 33400
@@ -29,9 +29,9 @@ services:
       - ${MEDIA}:/media
       - ${STORAGE}/tmp:/tmp
     restart: unless-stopped
-    networks: 
-      lan:
-        ipv4_address: 192.168.0.3
+    network_mode: "host"
+      #lan:
+        #ipv4_address: 192.168.0.3
 
   transmission:
     image : jaymoulin/transmission
