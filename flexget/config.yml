@@ -17,22 +17,72 @@ templates:
           propers: 12 hours
           quality: 720p
       tv:
-      - Brooklyn Nine-Nine
-      - Mr Robot
-      - Rick and Morty
-      - Westworld
+      - 'X-Men: The Animated Series'
+      - 'Spider-Man: The Animated Series'
 
     transmission:
       host: transmission
       port: 9091
       username: admin
-      password: "123456"
+      password: '123456'
 
 tasks:
-  eztvrss:
-    rss: https://eztv.ag/ezrss.xml
+  #eztvrss:
+    #rss: https://eztv.ag/ezrss.xml
+    #template: tv
+    #priority: 2
+  americangods:
+    rss: https://showrss.info/show/810.rss
+    template: tv
+    priority: 3
+  chernobyl:
+    rss: https://showrss.info/show/1151.rss
     template: tv
     priority: 2
+  clonewars :
+    rss: https://showrss.info/show/1280.rss
+    template: tv
+    priority: 2
+  dynasty:
+    rss: https://showrss.info/show/915.rss
+    template: tv
+    priority: 4
+  fleabag:
+    rss: https://showrss.info/show/624.rss
+    template: tv
+    priority: 2
+  gameofthrones:
+    rss: https://showrss.info/show/262.rss
+    template: tv
+    priority: 2
+  goodomens:
+    rss: https://showrss.info/show/1156.rss
+    template: tv
+    priority: 3
+  mrrobot:
+    rss: https://showrss.info/show/273.rss
+    template: tv
+    priority: 2
+  rebels:
+    rss: https://showrss.info/show/129.rss
+    template: tv
+    priority: 2
+  rickandmorty:
+    rss: https://showrss.info/show/44.rss
+    template: tv
+    priority: 3
+  theblacklist:
+    rss: https://showrss.info/show/81.rss
+    template: tv
+    priority: 3
+  watchmen:
+    rss: https://showrss.info/show/1213.rss
+    template: tv
+    priority: 3
+  westworld:
+    rss: https://showrss.info/show/651.rss
+    template: tv
+    priority: 3
   sort_tv:
     priority: 2
     no_entries_ok: yes
@@ -80,7 +130,7 @@ tasks:
       host: transmission
       port: 9091
       username: admin
-      password: "123456"
+      password: '123456'
     disable: [seen, seen_info_hash]
     if:
       - transmission_progress == 100: accept
@@ -90,5 +140,5 @@ tasks:
       host: transmission
       port: 9091
       username: admin
-      password: "123456"
+      password: '123456'
       action: purge
