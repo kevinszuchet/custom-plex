@@ -30,8 +30,19 @@ services:
       - ${STORAGE}/tmp:/tmp
     restart: unless-stopped
     network_mode: "host"
-      #lan:
-        #ipv4_address: 192.168.0.3
+
+  tautulli:
+    image: linuxserver/tautulli
+    container_name: tautulli
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=America/Argentina/Buenos_Aires
+    volumes:
+      - ${STORAGE}/Plex Media Server/tautulli:/config
+      - ${STORAGE}/Plex Media Server/tautulli-logs:/logs
+    ports:
+      - 8181:8181
 
   transmission:
     image : jaymoulin/transmission
@@ -48,7 +59,7 @@ services:
     restart: unless-stopped
 
   flexget:
-    image : pablokbs/docker-flexget:amd64
+    image : cpoppema/docker-flexget
     volumes:
       - ./flexget:/config
       - ${STORAGE}/torrents:/downloads
@@ -62,12 +73,51 @@ services:
     links:
       - transmission
 
-networks:
-  lan:
-    driver: macvlan
-    driver_opts:
-      parent: enp0s31f6
-    ipam:
-      config:
-        - subnet: "192.168.0.0/24"
-          gateway: "192.168.0.1"
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "192.168.1.119:53:53/tcp"
+      - "192.168.1.119:53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+      - "443:443/tcp"
+    environment:
+      TZ: 'America/Argentina/Buenos_Aires'
+      WEBPASSWORD: 'Q*6ENPS\\;XX3q(-'
+    # Volumes store your data between container upgrades
+    volumes:
+       - ${STORAGE}/etc-pihole/:/etc/pihole/
+       - ${STORAGE}/etc-dnsmasq.d/:/etc/dnsmasq.d/
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    # Recommended but not required (DHCP needs NET_ADMIN)
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+
+  duckdns:
+    image: linuxserver/duckdns
+    container_name: duckdns
+    environment:
+      - PUID=1000 #optional
+      - PGID=1000 #optional
+      - TZ=America/Argentina/Buenos_Aires
+      - SUBDOMAINS=kevinszuchet
+      - TOKEN=${DUCKDNS_TOKEN}
+      - LOG_FILE=false #optional
+    volumes:
+      - ${STORAGE}/duckdns:/config #optional
+    restart: unless-stopped
+
+# networks:
+#   lan:
+#     driver: macvlan
+#     driver_opts:
+#       parent: enp0s31f6
+#     ipam:
+#       config:
+#         - subnet: "192.168.0.0/24"
+#           gateway: "192.168.0.1"
