@@ -17,8 +17,21 @@ templates:
           propers: 12 hours
           quality: 720p
       tv:
-      - 'X-Men: The Animated Series'
+      - American Gods
+      - Chernobyl
+      # - Dynasty
+      - Fleabag
+      # - Game Of Thrones
+      - Good Omens
+      - Mr. Robot
+      # - Rick and Morty
       - 'Spider-Man: The Animated Series'
+      - 'Star Wars: The Clone Wars'
+      - Star Wars Rebels
+      # - The Blacklist
+      - Watchmen
+      - Westworld
+      - 'X-Men: The Animated Series'
 
     transmission:
       host: transmission
@@ -27,62 +40,10 @@ templates:
       password: '123456'
 
 tasks:
-  #eztvrss:
-    #rss: https://eztv.ag/ezrss.xml
-    #template: tv
-    #priority: 2
-  americangods:
-    rss: https://showrss.info/show/810.rss
-    template: tv
-    priority: 3
-  chernobyl:
-    rss: https://showrss.info/show/1151.rss
+  eztvrss:
+    rss: https://eztv.ag/ezrss.xml
     template: tv
     priority: 2
-  clonewars :
-    rss: https://showrss.info/show/1280.rss
-    template: tv
-    priority: 2
-  dynasty:
-    rss: https://showrss.info/show/915.rss
-    template: tv
-    priority: 4
-  fleabag:
-    rss: https://showrss.info/show/624.rss
-    template: tv
-    priority: 2
-  gameofthrones:
-    rss: https://showrss.info/show/262.rss
-    template: tv
-    priority: 2
-  goodomens:
-    rss: https://showrss.info/show/1156.rss
-    template: tv
-    priority: 3
-  mrrobot:
-    rss: https://showrss.info/show/273.rss
-    template: tv
-    priority: 2
-  rebels:
-    rss: https://showrss.info/show/129.rss
-    template: tv
-    priority: 2
-  rickandmorty:
-    rss: https://showrss.info/show/44.rss
-    template: tv
-    priority: 3
-  theblacklist:
-    rss: https://showrss.info/show/81.rss
-    template: tv
-    priority: 3
-  watchmen:
-    rss: https://showrss.info/show/1213.rss
-    template: tv
-    priority: 3
-  westworld:
-    rss: https://showrss.info/show/651.rss
-    template: tv
-    priority: 3
   sort_tv:
     priority: 2
     no_entries_ok: yes
@@ -101,11 +62,12 @@ tasks:
       auto_escape: yes
       on_output:
         for_entries: |
-          if mediainfo "{{ location }}" | grep EAC3; then
-            mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
-          else
-            mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && cp "{{ location }}" "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
-          fi
+          mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && cp "{{ location }}" "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
+          # if mediainfo "{{ location }}" | grep EAC3; then
+          #   mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
+          # else
+          #   mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && cp "{{ location }}" "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
+          # fi
   sort_movies:
     priority: 2
     no_entries_ok: yes
@@ -134,8 +96,8 @@ tasks:
     disable: [seen, seen_info_hash]
     if:
       - transmission_progress == 100: accept
-      - not transmission_seed_ratio_ok: reject
-      - not transmission_idle_limit_ok: reject
+      # - not transmission_seed_ratio_ok: reject
+      # - not transmission_idle_limit_ok: reject
     transmission:
       host: transmission
       port: 9091
