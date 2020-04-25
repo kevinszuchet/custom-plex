@@ -65,6 +65,12 @@ tasks:
           # else
           #   mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && cp "{{ location }}" "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
           # fi
+  queue-letterboxd-watchlist:
+    letterboxd:
+      username: kevinszuchet
+      list: watchlist
+    accept_all: yes
+    movie_queue: add
   sort_movies:
     priority: 2
     no_entries_ok: yes
