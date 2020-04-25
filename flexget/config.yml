@@ -4,6 +4,9 @@ schedules:
   - tasks: '*'
     interval:
       minutes: 30
+  - tasks: '*letterboxd*'
+    interval:
+      days: 10
 
 templates:
   tv:
@@ -31,16 +34,63 @@ templates:
       port: 9091
       username: admin
       password: '123456'
+  
+  movies:
+    regexp:
+      reject:
+        - x265: {from: title}
+    series:
+      settings:
+        movies:
+          exact: yes
+          propers: 12 hours
+          quality: 720p-1080p
+    
+    list_match:
+      from:
+        - movie_list: movies
+    
+    transmission:
+      host: transmission
+      port: 9091
+      username: admin
+      password: '123456'
 
 tasks:
   eztvrss:
     rss: https://eztv.ag/ezrss.xml
     template: tv
     priority: 2
-  tpbrss:
-    rss: https://tpb.party/rss
+
+  tpbrss_tv:
+    rss: https://tpb.party/rss/top100/205
     template: tv
     priority: 2
+
+  queue-letterboxd-watchlist:
+    letterboxd:
+      username: kevinszuchet
+      list: watchlist
+    accept_all: yes
+    list_add:
+      - movie_list: movies
+
+  discover_movies:
+    priority: 10 # run after the movie queue fill task
+    discover:
+      what:
+        - movie_list: movies
+      from:
+        - piratebay: yes
+      interval: 7 days
+    template: movies
+    torrent_alive: 10 # Will reject results with less than 10 seeds
+
+  tpbrss_movies:
+    rss: https://tpb.party/rss//top100/200
+    template: movies
+    priority: 10 # run after the movie queue fill task
+
   sort_tv:
     priority: 2
     no_entries_ok: yes
@@ -61,17 +111,11 @@ tasks:
         for_entries: |
           mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && cp "{{ location }}" "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
           # if mediainfo "{{ location }}" | grep EAC3; then
-          #   mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
+            # mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
           # else
-          #   mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && cp "{{ location }}" "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
+            # mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && cp "{{ location }}" "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
           # fi
-  queue-letterboxd-watchlist:
-    letterboxd:
-      username: kevinszuchet
-      list: watchlist
-    accept_all: yes
-    list_add:
-      - movie_list: movies
+  
   sort_movies:
     priority: 2
     no_entries_ok: yes
@@ -86,11 +130,13 @@ tasks:
       auto_escape: yes
       on_output:
        for_entries: |
-         if mediainfo "{{ location }}" | grep EAC3; then
-           mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" && ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
-         else
-           mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" && cp "{{ location }}" "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
-         fi
+         mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" && cp "{{ location }}" "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
+         # if mediainfo "{{ location }}" | grep EAC3; then
+           # mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" && ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
+         # else
+           # mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" && cp "{{ location }}" "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
+         # fi
+  
   remove_stale_torrents:
     from_transmission:
       host: transmission
