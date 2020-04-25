@@ -20,11 +20,11 @@ templates:
       - American Gods
       - His Dark Materials
       - Mr Robot
+      - Spider-Man The Animated Series
       - Star Wars The Clone Wars
       - Star Wars Rebels
       - Watchmen
-      # - 'Spider-Man: The Animated Series'
-      # - 'X-Men: The Animated Series'
+      - X-Men The Animated Series
 
     transmission:
       host: transmission
@@ -35,6 +35,10 @@ templates:
 tasks:
   eztvrss:
     rss: https://eztv.ag/ezrss.xml
+    template: tv
+    priority: 2
+  tpbrss:
+    rss: https://tpb.party/rss
     template: tv
     priority: 2
   sort_tv:
