@@ -14,3 +14,4 @@ transmission/*.dat
 transmission/*.json
 flexget/.*
 flexget/cached_resources
+*.env*
