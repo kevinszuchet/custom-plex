@@ -70,7 +70,8 @@ tasks:
       username: kevinszuchet
       list: watchlist
     accept_all: yes
-    movie_queue: add
+    list_add:
+      - movie_list: movies
   sort_movies:
     priority: 2
     no_entries_ok: yes
