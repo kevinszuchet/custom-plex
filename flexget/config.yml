@@ -18,20 +18,13 @@ templates:
           quality: 720p
       tv:
       - American Gods
-      - Chernobyl
-      # - Dynasty
-      - Fleabag
-      # - Game Of Thrones
-      - Good Omens
-      - Mr. Robot
-      # - Rick and Morty
-      - 'Spider-Man: The Animated Series'
-      - 'Star Wars: The Clone Wars'
+      - His Dark Materials
+      - Mr Robot
+      - Star Wars The Clone Wars
       - Star Wars Rebels
-      # - The Blacklist
       - Watchmen
-      - Westworld
-      - 'X-Men: The Animated Series'
+      # - 'Spider-Man: The Animated Series'
+      # - 'X-Men: The Animated Series'
 
     transmission:
       host: transmission
