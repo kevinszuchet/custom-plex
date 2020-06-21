@@ -7,9 +7,6 @@ schedules:
   - tasks: '*letterboxd*'
     interval:
       days: 10
-  - tasks: '*subtitles*'
-    interval:
-      days: 3
 
 variables: variables.yml
 
@@ -159,36 +156,3 @@ tasks:
       username: '{? transmission.user ?}'
       password: '{? transmission.pass ?}'
       action: purge
-
-  # get_subtitles:
-  #    priority: 5
-  #    disable:
-  #      - seen
-  #      - retry_failed
-  #    max_reruns: 0
-  #    filesystem:
-  #      path: 
-  #        - /storage          # unix
-  #      regexp: '.*\.(avi|mkv|mp4)$'  # only include filenames with these extensions
-  #      recursive: yes
-  #    accept_all: yes
-  #    seen: local                     # seen shouldn't interfer with anything outside this subtitles task
-  #    subliminal:
-  #      languages:
-  #        - es-AR
-  #        - es-MX
-  #        - es
-  #      alternatives:
-  #        - eng
-  #      exact_match: yes
-  #      #only use the following providers
-  #      providers: [opensubtitles, tvsubtitles] # addic7ed
-  #      single: no
-  #      hearing_impaired: yes
-  #      authentication:               #consider using the variables plugin
-  #        # addic7ed:
-  #          # username: kevinsz
-  #          # password: bGj2qedG3-jg_wG
-  #        opensubtitles:
-  #          username: kevinsz2
-  #          password: b9p@qxxiE3xJ6E2
