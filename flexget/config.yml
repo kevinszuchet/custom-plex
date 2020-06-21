@@ -11,6 +11,8 @@ schedules:
     interval:
       days: 3
 
+variables: variables.yml
+
 templates:
   tv:
     regexp:
@@ -35,8 +37,8 @@ templates:
     transmission:
       host: transmission
       port: 9091
-      username: admin
-      password: '123456'
+      username: '{? transmission.user ?}'
+      password: '{? transmission.pass ?}'
   
   movies:
     regexp:
@@ -56,8 +58,8 @@ templates:
     transmission:
       host: transmission
       port: 9091
-      username: admin
-      password: '123456'
+      username: '{? transmission.user ?}'
+      password: '{? transmission.pass ?}'
 
 tasks:
   eztvrss:
@@ -144,8 +146,8 @@ tasks:
     from_transmission:
       host: transmission
       port: 9091
-      username: admin
-      password: '123456'
+      username: '{? transmission.user ?}'
+      password: '{? transmission.pass ?}'
     disable: [seen, seen_info_hash]
     if:
       - transmission_progress == 100: accept
@@ -154,8 +156,8 @@ tasks:
     transmission:
       host: transmission
       port: 9091
-      username: admin
-      password: '123456'
+      username: '{? transmission.user ?}'
+      password: '{? transmission.pass ?}'
       action: purge
 
   # get_subtitles:
