@@ -31,18 +31,24 @@ services:
     restart: unless-stopped
     network_mode: "host"
 
-  tautulli:
-    image: linuxserver/tautulli
-    container_name: tautulli
-    environment:
-      - PUID=1001
-      - PGID=1001
-      - TZ=America/Argentina/Buenos_Aires
-    volumes:
-      - ${STORAGE}/Plex Media Server/tautulli:/config
-      - ${STORAGE}/Plex Media Server/tautulli-logs:/logs
-    ports:
-      - 8181:8181
+  # plex_video_converter:
+  #   image: jaymoulin/rpi-plex-video-converter
+  #   volumes:
+  #     - ${MEDIA}:/media
+  #   restart: unless-stopped
+
+  # tautulli:
+  #   image: linuxserver/tautulli
+  #   container_name: tautulli
+  #   environment:
+  #     - PUID=1001
+  #     - PGID=1001
+  #     - TZ=America/Argentina/Buenos_Aires
+  #   volumes:
+  #     - ${STORAGE}/Plex Media Server/tautulli:/config
+  #     - ${STORAGE}/Plex Media Server/tautulli-logs:/logs
+  #   ports:
+  #     - 8181:8181
 
   transmission:
     image : jaymoulin/transmission
@@ -77,8 +83,8 @@ services:
     container_name: pihole
     image: pihole/pihole:latest
     ports:
-      - "192.168.1.119:53:53/tcp"
-      - "192.168.1.119:53:53/udp"
+      - "53:53/tcp"
+      - "53:53/udp"
       - "67:67/udp"
       - "80:80/tcp"
       - "443:443/tcp"
@@ -112,12 +118,12 @@ services:
       - ${STORAGE}/duckdns:/config #optional
     restart: unless-stopped
 
-# networks:
-#   lan:
-#     driver: macvlan
-#     driver_opts:
-#       parent: enp0s31f6
-#     ipam:
-#       config:
-#         - subnet: "192.168.0.0/24"
-#           gateway: "192.168.0.1"
+networks:
+  lan:
+    driver: macvlan
+    driver_opts:
+      parent: enp0s31f6
+    ipam:
+      config:
+        - subnet: "192.168.0.0/24"
+          gateway: "192.168.0.1"
