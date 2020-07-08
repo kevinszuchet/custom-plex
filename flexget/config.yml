@@ -22,31 +22,21 @@ templates:
           propers: 12 hours
           quality: 720p
       tv:
-      - American Gods
-      - His Dark Materials
-      - Mr Robot
-      - Spider-Man The Animated Series
-      - Star Wars The Clone Wars
-      - Star Wars Rebels
-      - Watchmen
-      - X-Men The Animated Series
+      - Silicon Valley
+      - This Is Us
+      - A Series of Unfortunate Events
+      - Deadly Class
 
     transmission:
       host: transmission
       port: 9091
-      username: '{? transmission.user ?}'
-      password: '{? transmission.pass ?}'
+      username: admin #'{? transmission.user ?}'
+      password: '123456' #'{? transmission.pass ?}'
   
   movies:
     regexp:
       reject:
         - x265: {from: title}
-    series:
-      settings:
-        movies:
-          exact: yes
-          propers: 12 hours
-          quality: 720p-1080p
     
     list_match:
       from:
@@ -55,8 +45,8 @@ templates:
     transmission:
       host: transmission
       port: 9091
-      username: '{? transmission.user ?}'
-      password: '{? transmission.pass ?}'
+      username: admin #'{? transmission.user ?}'
+      password: '123456' #'{? transmission.pass ?}'
 
 tasks:
   eztvrss:
@@ -77,6 +67,14 @@ tasks:
     list_add:
       - movie_list: movies
 
+  queue-letterboxd-mcu:
+    letterboxd:
+      username: lelouch120
+      list: all-marvel-cinematic-universe-films-ranked
+    accept_all: yes
+    list_add:
+      - movie_list: movies
+
   discover_movies:
     priority: 10 # run after the movie queue fill task
     discover:
@@ -84,7 +82,6 @@ tasks:
         - movie_list: movies
       from:
         - piratebay: yes
-      interval: 7 days
     template: movies
     torrent_alive: 10 # Will reject results with less than 10 seeds
 
@@ -143,8 +140,8 @@ tasks:
     from_transmission:
       host: transmission
       port: 9091
-      username: '{? transmission.user ?}'
-      password: '{? transmission.pass ?}'
+      username: admin #'{? transmission.user ?}'
+      password: '123456' #'{? transmission.pass ?}'
     disable: [seen, seen_info_hash]
     if:
       - transmission_progress == 100: accept
@@ -153,6 +150,6 @@ tasks:
     transmission:
       host: transmission
       port: 9091
-      username: '{? transmission.user ?}'
-      password: '{? transmission.pass ?}'
+      username: admin #'{? transmission.user ?}'
+      password: '123456' #'{? transmission.pass ?}'
       action: purge
